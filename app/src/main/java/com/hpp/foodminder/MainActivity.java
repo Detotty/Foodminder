@@ -1,5 +1,6 @@
 package com.hpp.foodminder;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,14 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends SlidingDrawerActivity {
 
-    //Defining Variables
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,16 @@ public class MainActivity extends SlidingDrawerActivity {
 
     }
 
-   /* @Override
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ImageView mHome = (ImageView) toolbar.findViewById(R.id.home);
+        mHome.setVisibility(View.GONE);
+        TextView mText = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "Pacifico.ttf");
+        mText.setTypeface(tf);
+    }
+    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);

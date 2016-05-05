@@ -32,7 +32,7 @@ public class SlidingDrawerActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     public static Context context;
-    private Toolbar toolbar;
+    public Toolbar toolbar;
 
 
     @Override
@@ -44,7 +44,6 @@ public class SlidingDrawerActivity extends AppCompatActivity {
 
     private void initDrawer() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
