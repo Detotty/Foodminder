@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/list"
+            android:checked="false"
+            android:icon="@drawable/list"
+            android:title="@string/c_list" />
+
+        <item
+            android:id="@+id/backup"
+            android:checked="false"
+            android:icon="@drawable/backup"
+            android:title="@string/backup" />
+
+        <item
+            android:id="@+id/restore"
+            android:checked="false"
+            android:icon="@drawable/restore"
+            android:title="@string/restore" />
+
+        <item
+            android:id="@+id/help"
+            android:checked="false"
+            android:icon="@drawable/help"
+            android:title="@string/help" />
+
+
+        <item
+            android:id="@+id/about"
+            android:checked="false"
+            android:icon="@drawable/about"
+            android:title="@string/about" />
+        <item
+            android:id="@+id/contact"
+            android:checked="false"
+            android:icon="@drawable/contact"
+            android:title="@string/contact" />
+    </group>
+</menu>
