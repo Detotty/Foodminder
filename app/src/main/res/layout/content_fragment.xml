@@ -14,4 +14,9 @@
         android:id="@+id/textView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+    <EditText
+        android:id="@+id/et_CardName"
+        style="@style/AddRestEditText"
+        android:hint="Add Restaurant" >
+    </EditText>
 </RelativeLayout>

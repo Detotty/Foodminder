@@ -35,7 +35,7 @@ public class MainActivity extends SlidingDrawerActivity {
     protected void onResume() {
         super.onResume();
         ImageView mHome = (ImageView) toolbar.findViewById(R.id.home);
-        mHome.setVisibility(View.GONE);
+        mHome.setImageDrawable(getResources().getDrawable(R.drawable.filter));
         TextView mText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         Typeface tf = Typeface.createFromAsset(getAssets(), "Pacifico.ttf");
         mText.setTypeface(tf);
