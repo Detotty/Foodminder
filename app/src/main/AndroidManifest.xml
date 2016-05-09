@@ -22,7 +22,13 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AddRestaurant" />
-        <activity android:name=".AddItem"></activity>
+        <activity android:name=".AddItem" />
+        <activity android:name=".ViewRestaurant" />
+        <activity android:name=".ViewItem" />
+        <activity
+            android:name=".CuisineList"
+            android:label="@string/title_activity_cuisine_list"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
