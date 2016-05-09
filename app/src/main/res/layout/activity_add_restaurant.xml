@@ -29,25 +29,38 @@
 
 
                 <EditText
-                    android:id="@+id/et_CardName"
+                    android:id="@+id/et_name"
                     style="@style/AddRestEditText"
                     android:hint="Restaurant Name"></EditText>
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.AppCompatSpinner>
                 <Button
-                    android:id="@+id/add_rest"
+                    android:id="@+id/btn_location"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_margin="15dp"
                     android:background="@drawable/btn_selector"
-                    android:text="Add Restaurant"
-                    android:textColor="@color/white"
-                    android:contentDescription="@string/app_name"/>
+                    android:text="Use My Location"
+                    android:textColor="@color/white"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:scrollbars="vertical" />
+
+
+                <EditText
+                    android:id="@+id/et_add"
+                    style="@style/AddRestEditText"
+                    android:hint="Enter Address, City, State"></EditText>
+
+                <EditText
+                    android:id="@+id/et_phone"
+                    style="@style/AddRestEditText"
+                    android:hint="Enter Phone"></EditText>
+
+
 
             </LinearLayout>
         </FrameLayout>
