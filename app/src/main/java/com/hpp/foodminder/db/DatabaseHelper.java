@@ -6,7 +6,9 @@ import android.util.Log;
 
 import com.hpp.foodminder.MainActivity;
 import com.hpp.foodminder.R;
+import com.hpp.foodminder.models.CuisineModel;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -22,7 +24,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      ************************************************/
 
     private static final String DATABASE_NAME = "favorites.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 1;
+
+    private Dao<CuisineModel, Integer> cuisineModelIntegerDao;
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
@@ -38,9 +43,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
 
-            TableUtils.createTableIfNotExists(connectionSource, MainActivity.class);
+            TableUtils.createTableIfNotExists(connectionSource, CuisineModel.class);
 
-            TableUtils.createTable(connectionSource, MainActivity.class);
+
 
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
@@ -53,8 +58,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // In case of change in database of next version of application, please increase the value of DATABASE_VERSION variable, then this method will be invoked
             //automatically. Developer needs to handle the upgrade logic here, i.e. create a new table or a new column to an existing table, take the backups of the
             // existing database etc.
+            TableUtils.dropTable(connectionSource, CuisineModel.class, true);
 
-            TableUtils.dropTable(connectionSource, MainActivity.class, true);
 
             onCreate(sqliteDatabase, connectionSource);
 
@@ -67,12 +72,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // Create the getDao methods of all database tables to access those from android code.
     // Insert, delete, read, update everything will be happened through DAOs
 
-    /*public Dao<ShopsModel, Integer> getShopsDao() throws SQLException {
-        if (shopsDao == null) {
-            shopsDao = getDao(ShopsModel.class);
+    public Dao<CuisineModel, Integer> getCuisineDao() throws SQLException {
+        if (cuisineModelIntegerDao == null) {
+            cuisineModelIntegerDao = getDao(CuisineModel.class);
         }
-        return shopsDao;
-    }*/
+        return cuisineModelIntegerDao;
+    }
 
 
     public void close() {
