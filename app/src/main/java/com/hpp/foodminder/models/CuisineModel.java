@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class CuisineModel implements Serializable {
 
-    @DatabaseField(id = true, generatedId = true)
+    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true)
     int Id;
 
     @DatabaseField(columnName = "Name")

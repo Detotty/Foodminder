@@ -69,10 +69,12 @@ public class SlidingDrawerActivity extends AppCompatActivity {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.list:
                         Toast.makeText(getApplicationContext(), "Cuisine List", Toast.LENGTH_SHORT).show();
-                        ContentFragment fragment = new ContentFragment();
+                        /*ContentFragment fragment = new ContentFragment();
                         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.frame,fragment);
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commit();*/
+                        Intent i  = new Intent(SlidingDrawerActivity.this,CuisineList.class);
+                        startActivity(i);
                         return true;
 
                     // For rest of the options we just show a toast on click
