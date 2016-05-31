@@ -9,7 +9,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/colorAccent"
+        card_view:cardBackgroundColor="@color/colorList"
         android:layout_gravity="center"
         android:layout_margin="3dp"
         card_view:cardCornerRadius="4dp">

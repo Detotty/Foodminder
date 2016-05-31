@@ -35,11 +35,13 @@
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_cuisine"
+                    android:background="@drawable/text_field"
                     android:layout_margin="15dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="50dp">
 
                 </android.support.v7.widget.AppCompatSpinner>
+
                 <Button
                     android:id="@+id/btn_location"
                     android:layout_width="match_parent"

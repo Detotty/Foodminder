@@ -1,5 +1,6 @@
 package com.hpp.foodminder;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,7 +9,10 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -18,10 +22,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hpp.foodminder.adapter.RestaurantAdapter;
+import com.hpp.foodminder.db.DatabaseHelper;
+import com.hpp.foodminder.models.CuisineModel;
+import com.hpp.foodminder.models.RestaurantModel;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
 public class MainActivity extends SlidingDrawerActivity {
 
 
     Button AddRest;
+    Dao<RestaurantModel, Integer> restaurantDao;
+    private DatabaseHelper databaseHelper = null;
+    ArrayList<RestaurantModel> dbList = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +53,7 @@ public class MainActivity extends SlidingDrawerActivity {
 
 
         AddRest = (Button) findViewById(R.id.add_rest);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         AddRest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +62,55 @@ public class MainActivity extends SlidingDrawerActivity {
                 startActivity(i);
             }
         });
+        try {
+            // This is how, a reference of DAO object can be done
+            restaurantDao = getHelper().getRestaurantDao();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new CuisineList.RecyclerTouchListener(getApplicationContext(), recyclerView, new CuisineList.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+            }
 
+            @Override
+            public void onLongClick(View view, int position) {
+                final RestaurantModel model = dbList.get(position);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        MainActivity.this);
+                // set title
+                alertDialogBuilder.setTitle("Delete Restaurant");
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Are you sure you want to delete this restaurant")
+                        .setCancelable(true)
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                try {
+                                    DeleteBuilder<RestaurantModel, Integer> deleteBuilder = restaurantDao.deleteBuilder();
+                                    deleteBuilder.where().eq("Id", model.getId());
+                                    deleteBuilder.delete();
+                                    getDBCuisine();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }
+        }));
+        getDBCuisine();
 
     }
 
@@ -72,4 +144,37 @@ public class MainActivity extends SlidingDrawerActivity {
 
         return super.onOptionsItemSelected(item);
     }*/
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+
+    public void getDBCuisine() {
+        dbList = new ArrayList<>();
+        try {
+            // This is how, a reference of DAO object can be done
+            Dao<RestaurantModel, Integer> cuisineModels = getHelper().getRestaurantDao();
+            // Get our query builder from the DAO
+            final QueryBuilder<RestaurantModel, Integer> queryBuilder = cuisineModels.queryBuilder();
+            // We need only Students who are associated with the selected Teacher, so build the query by "Where" clause
+            // Prepare our SQL statement
+            final PreparedQuery<RestaurantModel> preparedQuery = queryBuilder.prepare();
+            // Fetch the list from Database by queryingit
+            final Iterator<RestaurantModel> studentsIt = cuisineModels.queryForAll().iterator();
+            // Iterate through the StudentDetails object iterator and populate the comma separated String
+            while (studentsIt.hasNext()) {
+                final RestaurantModel sDetails = studentsIt.next();
+                dbList.add(sDetails);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(dbList);
+        recyclerView.setAdapter(new RestaurantAdapter(dbList));
+    }
+
 }

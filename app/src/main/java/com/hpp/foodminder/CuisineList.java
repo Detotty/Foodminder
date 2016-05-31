@@ -210,7 +210,6 @@ public class CuisineList extends SlidingDrawerActivity {
                 public boolean onSingleTapUp(MotionEvent e) {
                     return true;
                 }
-
                 @Override
                 public void onLongPress(MotionEvent e) {
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());

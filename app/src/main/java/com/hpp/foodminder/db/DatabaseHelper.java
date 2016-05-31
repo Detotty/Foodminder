@@ -7,6 +7,7 @@ import android.util.Log;
 import com.hpp.foodminder.MainActivity;
 import com.hpp.foodminder.R;
 import com.hpp.foodminder.models.CuisineModel;
+import com.hpp.foodminder.models.RestaurantModel;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -24,9 +25,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      ************************************************/
 
     private static final String DATABASE_NAME = "favorites.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private Dao<CuisineModel, Integer> cuisineModelIntegerDao;
+    private Dao<RestaurantModel, Integer> restaurantModelIntegerDao;
 
 
     public DatabaseHelper(Context context) {
@@ -44,6 +46,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
 
             TableUtils.createTableIfNotExists(connectionSource, CuisineModel.class);
+            TableUtils.createTableIfNotExists(connectionSource, RestaurantModel.class);
 
 
 
@@ -59,6 +62,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             //automatically. Developer needs to handle the upgrade logic here, i.e. create a new table or a new column to an existing table, take the backups of the
             // existing database etc.
             TableUtils.dropTable(connectionSource, CuisineModel.class, true);
+            TableUtils.dropTable(connectionSource, RestaurantModel.class, true);
 
 
             onCreate(sqliteDatabase, connectionSource);
@@ -77,6 +81,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             cuisineModelIntegerDao = getDao(CuisineModel.class);
         }
         return cuisineModelIntegerDao;
+    }
+
+    public Dao<RestaurantModel, Integer> getRestaurantDao() throws SQLException {
+        if (restaurantModelIntegerDao == null) {
+            restaurantModelIntegerDao = getDao(RestaurantModel.class);
+        }
+        return restaurantModelIntegerDao;
     }
 
 
