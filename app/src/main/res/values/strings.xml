@@ -10,4 +10,20 @@
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
     <string name="title_activity_cuisine_list">CuisineList</string>
+
+    <string name="camera_persmission_message">You need to allow access to Camera</string>
+    <string name="location_permission_message">You need to allow access to Location</string>
+    <string name="contacts_permission_message">You need to allow access to Contacts</string>
+
+    <string name="take_photo_title">Take Photo</string>
+    <string name="reselect_picture_title">Re-Select Picture</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="search_location_title">Search location</string>
+    <string name="updating_profile_message">updating profile</string>
+    <string name="cancel_title">Cancel</string>
+    <string name="yes_title">Yes</string>
+    <string name="okay_title">ok</string>
+    <string name="add_photo_title">Add Photo</string>
+
+
 </resources>

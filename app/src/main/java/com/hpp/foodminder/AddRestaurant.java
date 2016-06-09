@@ -31,8 +31,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import static com.hpp.foodminder.ViewRestaurant.isRest;
+
 public class AddRestaurant extends SlidingDrawerActivity {
 
+    RestaurantModel restaurantModel = new RestaurantModel();
     EditText Add, phone, name;
     Button save, cancel, location;
     TextView or;
@@ -57,13 +60,27 @@ public class AddRestaurant extends SlidingDrawerActivity {
         phone = (EditText) findViewById(R.id.et_phone);
         name = (EditText) findViewById(R.id.et_name);
         selectCuisine = (Spinner) findViewById(R.id.sp_cuisine);
+        restaurantModel.setName(getIntent().getStringExtra("Name"));
+        if (isRest) {
+            isRest = false;
+            restaurantModel = (RestaurantModel) getIntent().getSerializableExtra("Rest");
+        }
+
         try {
             // This is how, a reference of DAO object can be done
             restaurantDao = getHelper().getRestaurantDao();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         getDBCuisine();
+        if (restaurantModel != null) {
+            name.setText(restaurantModel.getName());
+            if (restaurantModel.getPhone() != null)
+                phone.setText(restaurantModel.getPhone());
+            if (restaurantModel.getAddress() != null)
+                Add.setText(restaurantModel.getAddress());
+        }
         cuisineList.add("Select Cuisine");
         for (CuisineModel cuisine : dbList
                 ) {
@@ -108,12 +125,12 @@ public class AddRestaurant extends SlidingDrawerActivity {
             public void onClick(View v) {
 
                 if (!name.getText().toString().isEmpty()) {
-                    RestaurantModel restaurantModel = new RestaurantModel();
                     restaurantModel.setName(name.getText().toString());
                     restaurantModel.setAddress(Add.getText().toString());
                     restaurantModel.setPhone(phone.getText().toString());
                     restaurantModel.setCuisine(selectCuisine.getSelectedItem().toString());
                     updateCuisines(restaurantModel);
+                    finish();
 
                 } else {
                     Toast.makeText(AddRestaurant.this, "Please enter restaurant name", Toast.LENGTH_SHORT).show();
@@ -164,9 +181,6 @@ public class AddRestaurant extends SlidingDrawerActivity {
     //endregion
 
 
-
-
-
     void getDefaultLocation(Context context) {
 
         Lattitude_Logitude gps = new Lattitude_Logitude(context);
@@ -174,20 +188,19 @@ public class AddRestaurant extends SlidingDrawerActivity {
         //String countryZipCode = null;
 
         // check if GPS enabled
-        if(gps.canGetLocation()){
+        if (gps.canGetLocation()) {
 
-            double latitude ;
+            double latitude;
             double longitude;
             String countryName;
             String countryID;
-
 
 
             try {
 
                 String address = gps.onLocationCountry();
 
-                if(address!= null) {
+                if (address != null) {
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
                     countryName = gps.getCountryName();
@@ -195,7 +208,7 @@ public class AddRestaurant extends SlidingDrawerActivity {
                     String cityName = gps.getCityName();
                     android.util.Log.e(" condition..", "address ..." + address + ": City Name:" + cityName);
 
-                    Add.setText(address + ", " +cityName);
+                    Add.setText(address + ", " + cityName);
 
 //                if(countryID!= null && countryID.length()>0 &&  !countryID.equals("null")){
 //
@@ -216,13 +229,11 @@ public class AddRestaurant extends SlidingDrawerActivity {
                 }
 
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 //countryEditText.setText("");
 //                Toast.makeText(context, R.string.location_msg3, Toast.LENGTH_LONG).show();
             }
-
-
 
 
 //            mobile_no.requestFocus();
@@ -236,7 +247,7 @@ public class AddRestaurant extends SlidingDrawerActivity {
 //            });
 //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        }else{
+        } else {
             android.util.Log.e(" else condition..", "call pop up for location ..");
         }
     }

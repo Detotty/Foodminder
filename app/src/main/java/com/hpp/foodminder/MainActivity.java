@@ -1,5 +1,6 @@
 package com.hpp.foodminder;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -14,10 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,10 +45,12 @@ public class MainActivity extends SlidingDrawerActivity {
 
 
     Button AddRest;
+    EditText Name;
     Dao<RestaurantModel, Integer> restaurantDao;
     private DatabaseHelper databaseHelper = null;
     ArrayList<RestaurantModel> dbList = new ArrayList<>();
     private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +59,14 @@ public class MainActivity extends SlidingDrawerActivity {
 
 
         AddRest = (Button) findViewById(R.id.add_rest);
+        Name = (EditText) findViewById(R.id.et_CardName);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         AddRest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i  = new Intent(MainActivity.this,AddRestaurant.class);
+                i.putExtra("Name", Name.getText().toString());
                 startActivity(i);
             }
         });
@@ -72,6 +80,9 @@ public class MainActivity extends SlidingDrawerActivity {
         recyclerView.addOnItemTouchListener(new CuisineList.RecyclerTouchListener(getApplicationContext(), recyclerView, new CuisineList.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                Intent i  = new Intent(MainActivity.this,ViewRestaurant.class);
+                i.putExtra("Rest", dbList.get(position));
+                startActivity(i);
             }
 
             @Override
@@ -110,7 +121,6 @@ public class MainActivity extends SlidingDrawerActivity {
                 alertDialog.show();
             }
         }));
-        getDBCuisine();
 
     }
 
@@ -122,6 +132,7 @@ public class MainActivity extends SlidingDrawerActivity {
         TextView mText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         Typeface tf = Typeface.createFromAsset(getAssets(), "Pacifico.ttf");
         mText.setTypeface(tf);
+        getDBCuisine();
     }
     /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -176,5 +187,8 @@ public class MainActivity extends SlidingDrawerActivity {
         Collections.reverse(dbList);
         recyclerView.setAdapter(new RestaurantAdapter(dbList));
     }
+
+
+
 
 }
