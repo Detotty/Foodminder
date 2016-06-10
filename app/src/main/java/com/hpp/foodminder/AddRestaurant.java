@@ -80,6 +80,7 @@ public class AddRestaurant extends SlidingDrawerActivity {
                 phone.setText(restaurantModel.getPhone());
             if (restaurantModel.getAddress() != null)
                 Add.setText(restaurantModel.getAddress());
+
         }
         cuisineList.add("Select Cuisine");
         for (CuisineModel cuisine : dbList

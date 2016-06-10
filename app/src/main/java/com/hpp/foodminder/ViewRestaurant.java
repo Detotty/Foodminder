@@ -85,6 +85,7 @@ public class ViewRestaurant extends SlidingDrawerActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent(ViewRestaurant.this, AddItem.class);
+                i.putExtra("id", restaurantModel.getId());
                 startActivity(i);
             }
         });

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.hpp.foodminder.MainActivity;
 import com.hpp.foodminder.R;
 import com.hpp.foodminder.models.CuisineModel;
+import com.hpp.foodminder.models.ItemsModel;
 import com.hpp.foodminder.models.RestaurantModel;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -29,6 +30,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<CuisineModel, Integer> cuisineModelIntegerDao;
     private Dao<RestaurantModel, Integer> restaurantModelIntegerDao;
+    private Dao<ItemsModel, Integer> itemsModelIntegerDao;
 
 
     public DatabaseHelper(Context context) {
@@ -47,6 +49,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTableIfNotExists(connectionSource, CuisineModel.class);
             TableUtils.createTableIfNotExists(connectionSource, RestaurantModel.class);
+            TableUtils.createTableIfNotExists(connectionSource, ItemsModel.class);
 
 
 
@@ -63,6 +66,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // existing database etc.
             TableUtils.dropTable(connectionSource, CuisineModel.class, true);
             TableUtils.dropTable(connectionSource, RestaurantModel.class, true);
+            TableUtils.dropTable(connectionSource, ItemsModel.class, true);
 
 
             onCreate(sqliteDatabase, connectionSource);
@@ -90,6 +94,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return restaurantModelIntegerDao;
     }
 
+    public Dao<ItemsModel, Integer> getItemsDao() throws SQLException {
+        if (itemsModelIntegerDao == null) {
+            itemsModelIntegerDao = getDao(ItemsModel.class);
+        }
+        return itemsModelIntegerDao;
+    }
 
     public void close() {
         super.close();

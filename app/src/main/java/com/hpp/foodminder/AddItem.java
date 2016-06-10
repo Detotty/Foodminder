@@ -26,10 +26,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hpp.foodminder.db.DatabaseHelper;
 import com.hpp.foodminder.dialog.UserInfoDialog;
 import com.hpp.foodminder.models.ItemsModel;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +43,21 @@ public class AddItem extends SlidingDrawerActivity {
     TextView restName;
     private RatingBar ratingBar;
     ImageView profileImageView, Cam;
-
+    private DatabaseHelper databaseHelper = null;
+    Dao<ItemsModel, Integer> itemsDao;
+    int RestId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        try {
+            // This is how, a reference of DAO object can be done
+            RestId = getIntent().getIntExtra("id",1);
+            itemsDao = getHelper().getItemsDao();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -67,16 +81,18 @@ public class AddItem extends SlidingDrawerActivity {
             @Override
             public void onClick(View v) {
 
-                if (!ItemName.getText().toString().isEmpty()) {
+                if ( (!ItemName.getText().toString().isEmpty()) && (!Notes.getText().toString().isEmpty()) ) {
 
                     ItemsModel itemsModel = new ItemsModel();
                     itemsModel.setName(ItemName.getText().toString());
                     itemsModel.setNotes(Notes.getText().toString());
                     itemsModel.setRating(String.valueOf(ratingBar.getRating()));
+                    itemsModel.setId(RestId);
                     profile_image_bitmap = profileImageView.getDrawingCache();
                     itemsModel.setPic(encodeTobase64(profile_image_bitmap));
+                    updateItems(itemsModel);
                 } else {
-                    Toast.makeText(AddItem.this, "Please enter item name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddItem.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -89,6 +105,20 @@ public class AddItem extends SlidingDrawerActivity {
     }
 
 
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public void updateItems(ItemsModel itemsModel) {
+        try {
+            itemsDao.createOrUpdate(itemsModel);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     //region Image Selection
     @Override
