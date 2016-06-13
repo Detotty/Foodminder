@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.hpp.foodminder.db.DatabaseHelper;
 import com.hpp.foodminder.dialog.UserInfoDialog;
 import com.hpp.foodminder.models.ItemsModel;
+import com.hpp.foodminder.models.RestaurantModel;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
@@ -45,18 +46,40 @@ public class AddItem extends SlidingDrawerActivity {
     ImageView profileImageView, Cam;
     private DatabaseHelper databaseHelper = null;
     Dao<ItemsModel, Integer> itemsDao;
-    int RestId;
+    RestaurantModel restaurantModel;
+    ItemsModel itemsModel = new ItemsModel();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
         try {
             // This is how, a reference of DAO object can be done
-            RestId = getIntent().getIntExtra("id",1);
+            restaurantModel = (RestaurantModel) getIntent().getSerializableExtra("Rest");
             itemsDao = getHelper().getItemsDao();
+            itemsModel = (ItemsModel) getIntent().getSerializableExtra("Item");
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        ItemName = (EditText) findViewById(R.id.et_name);
+        Notes = (EditText) findViewById(R.id.et_notes);
+        restName = (TextView) findViewById(R.id.tv_name);
+        Cam = (ImageView) findViewById(R.id.iv_cam);
+        profileImageView = (ImageView) findViewById(R.id.iv_pic);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+        if (itemsModel != null) {
+            ItemName.setText(itemsModel.getName());
+            Notes.setText(itemsModel.getNotes());
+            restName.setText(restaurantModel.getName());
+            ratingBar.setRating(Float.parseFloat(itemsModel.getRating()));
+            if (itemsModel.getPic() != null) {
+                byte[] imageAsBytes = Base64.decode(itemsModel.getPic().getBytes(), Base64.DEFAULT);
+                profileImageView.setImageBitmap(
+                        BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length)
+                );
+            }
         }
     }
 
@@ -64,12 +87,6 @@ public class AddItem extends SlidingDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ItemName = (EditText) findViewById(R.id.et_name);
-        Notes = (EditText) findViewById(R.id.et_notes);
-        restName = (TextView) findViewById(R.id.tv_name);
-        Cam = (ImageView) findViewById(R.id.iv_cam);
-        profileImageView = (ImageView) findViewById(R.id.iv_pic);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         ImageView mHome = (ImageView) toolbar.findViewById(R.id.home);
         mHome.setImageDrawable(getResources().getDrawable(R.drawable.check_mark));
@@ -81,16 +98,21 @@ public class AddItem extends SlidingDrawerActivity {
             @Override
             public void onClick(View v) {
 
-                if ( (!ItemName.getText().toString().isEmpty()) && (!Notes.getText().toString().isEmpty()) ) {
+                if ((!ItemName.getText().toString().isEmpty()) && (!Notes.getText().toString().isEmpty())) {
 
-                    ItemsModel itemsModel = new ItemsModel();
+                    if (itemsModel == null) {
+                        itemsModel = new ItemsModel();
+                    }
                     itemsModel.setName(ItemName.getText().toString());
                     itemsModel.setNotes(Notes.getText().toString());
                     itemsModel.setRating(String.valueOf(ratingBar.getRating()));
-                    itemsModel.setId(RestId);
-                    profile_image_bitmap = profileImageView.getDrawingCache();
-                    itemsModel.setPic(encodeTobase64(profile_image_bitmap));
+                    itemsModel.setRestaurantModel(restaurantModel);
+//                    profile_image_bitmap = profileImageView.getDrawingCache();
+                    if (profile_image_bitmap != null)
+                        itemsModel.setPic(encodeTobase64(profile_image_bitmap));
+
                     updateItems(itemsModel);
+                    finish();
                 } else {
                     Toast.makeText(AddItem.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 }
@@ -243,6 +265,7 @@ public class AddItem extends SlidingDrawerActivity {
         }
         return true;
     }
+
     public static final int ACTION_TAKE_PHOTO_IMAGEVIEW = 21;
     public static final int ACTION_TAKE_PHOTO_FROM_GALLERY = 22;
 
@@ -262,6 +285,7 @@ public class AddItem extends SlidingDrawerActivity {
     String imageBase64String = "";
 
     String profile_image_path = null;
+
     private void rotatePicture(Uri uri) {
         try {
 

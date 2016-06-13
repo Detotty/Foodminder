@@ -25,8 +25,8 @@ public class ItemsModel implements Serializable {
     @DatabaseField(generatedId = true, allowGeneratedIdInsert = true)
     private int ItemId;
 
-    @DatabaseField(foreign = true)
-    private int Id;
+    @DatabaseField(canBeNull = false, foreign = true)
+    private RestaurantModel restaurantModel;
 
     public ItemsModel() {
     }
@@ -40,12 +40,12 @@ public class ItemsModel implements Serializable {
         this.ItemId = ItemId;
     }
 
-    public int getId() {
-        return Id;
+    public RestaurantModel getRestaurantModel() {
+        return restaurantModel;
     }
 
-    public void setId(int Id) {
-        this.Id = Id;
+    public void setRestaurantModel(RestaurantModel restaurantModel) {
+        this.restaurantModel = restaurantModel;
     }
 
     public String getName() {

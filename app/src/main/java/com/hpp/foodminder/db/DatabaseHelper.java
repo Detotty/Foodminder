@@ -26,7 +26,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      ************************************************/
 
     private static final String DATABASE_NAME = "favorites.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
 
     private Dao<CuisineModel, Integer> cuisineModelIntegerDao;
     private Dao<RestaurantModel, Integer> restaurantModelIntegerDao;
@@ -103,9 +103,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public void close() {
         super.close();
-        /*this.singblechatDao = null;
-        this.openchatsDao = null;
-        this.appcontactsDao = null;*/
+        /*this.cuisineModelIntegerDao = null;
+        this.restaurantModelIntegerDao = null;
+        this.itemsModelIntegerDao = null;*/
     }
 
 }
