@@ -85,13 +85,16 @@ public class SlidingDrawerActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Restore Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.help:
-                        Toast.makeText(getApplicationContext(),"Help Selected",Toast.LENGTH_SHORT).show();
+                        Intent is  = new Intent(SlidingDrawerActivity.this,HelpActivity.class);
+                        startActivity(is);
                         return true;
                     case R.id.about:
-                        Toast.makeText(getApplicationContext(),"About Selected",Toast.LENGTH_SHORT).show();
+                        Intent iss  = new Intent(SlidingDrawerActivity.this,HelpActivity.class);
+                        startActivity(iss);
                         return true;
                     case R.id.contact:
-                        Toast.makeText(getApplicationContext(),"Contact Selected",Toast.LENGTH_SHORT).show();
+                        Intent ias  = new Intent(SlidingDrawerActivity.this,HelpActivity.class);
+                        startActivity(ias);
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();

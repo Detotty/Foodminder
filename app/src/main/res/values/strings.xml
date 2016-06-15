@@ -25,5 +25,12 @@
     <string name="okay_title">ok</string>
     <string name="add_photo_title">Add Photo</string>
 
+    <string name="sort_by">Sort By</string>
+    <string name="choose">Choose</string>
+    <string-array name="sort_items">
+        <item>Restaurant</item>
+        <item>Cuisine</item>
+    </string-array>
+
 
 </resources>

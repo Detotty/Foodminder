@@ -1,5 +1,6 @@
 package com.hpp.foodminder;
 
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.hpp.foodminder.adapter.RestaurantAdapter;
 import com.hpp.foodminder.db.DatabaseHelper;
 import com.hpp.foodminder.models.CuisineModel;
@@ -39,6 +41,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class MainActivity extends SlidingDrawerActivity {
@@ -56,8 +59,13 @@ public class MainActivity extends SlidingDrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
-
-
+        /*try {
+            BackupManager bm = new BackupManager(this);
+            bm.dataChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
         AddRest = (Button) findViewById(R.id.add_rest);
         Name = (EditText) findViewById(R.id.et_CardName);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -65,7 +73,7 @@ public class MainActivity extends SlidingDrawerActivity {
         AddRest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  = new Intent(MainActivity.this,AddRestaurant.class);
+                Intent i = new Intent(MainActivity.this, AddRestaurant.class);
                 i.putExtra("Name", Name.getText().toString());
                 startActivity(i);
             }
@@ -80,7 +88,7 @@ public class MainActivity extends SlidingDrawerActivity {
         recyclerView.addOnItemTouchListener(new CuisineList.RecyclerTouchListener(getApplicationContext(), recyclerView, new CuisineList.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Intent i  = new Intent(MainActivity.this,ViewRestaurant.class);
+                Intent i = new Intent(MainActivity.this, ViewRestaurant.class);
                 i.putExtra("Rest", dbList.get(position));
                 startActivity(i);
             }
@@ -133,6 +141,43 @@ public class MainActivity extends SlidingDrawerActivity {
         Typeface tf = Typeface.createFromAsset(getAssets(), "Pacifico.ttf");
         mText.setTypeface(tf);
         getDBCuisine();
+
+        mHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(MainActivity.this)
+                        .title(R.string.sort_by)
+                        .items(R.array.sort_items)
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                /**
+                                 * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                                 * returning false here won't allow the newly selected radio button to actually be selected.
+                                 **/
+                                if (text.equals("Restaurant")) {
+                                    Collections.sort(dbList, new Comparator<RestaurantModel>() {
+                                        public int compare(RestaurantModel v1, RestaurantModel v2) {
+                                            return v1.getName().compareTo(v2.getName());
+                                        }
+                                    });
+                                    recyclerView.setAdapter(new RestaurantAdapter(dbList));
+                                } else {
+                                    Collections.sort(dbList, new Comparator<RestaurantModel>() {
+                                        public int compare(RestaurantModel v1, RestaurantModel v2) {
+                                            return v1.getCuisine().compareTo(v2.getCuisine());
+                                        }
+                                    });
+                                    recyclerView.setAdapter(new RestaurantAdapter(dbList));
+                                }
+
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.choose)
+                        .show();
+            }
+        });
     }
     /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -187,8 +232,6 @@ public class MainActivity extends SlidingDrawerActivity {
         Collections.reverse(dbList);
         recyclerView.setAdapter(new RestaurantAdapter(dbList));
     }
-
-
 
 
 }
