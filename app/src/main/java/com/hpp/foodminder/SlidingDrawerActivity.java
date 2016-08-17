@@ -92,10 +92,10 @@ public class SlidingDrawerActivity extends AppCompatActivity {
                         Intent iss  = new Intent(SlidingDrawerActivity.this,HelpActivity.class);
                         startActivity(iss);
                         return true;
-                    case R.id.contact:
+                    /*case R.id.contact:
                         Intent ias  = new Intent(SlidingDrawerActivity.this,HelpActivity.class);
                         startActivity(ias);
-                        return true;
+                        return true;*/
                     default:
                         Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
                         return true;

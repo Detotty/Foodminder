@@ -76,6 +76,7 @@ public class MainActivity extends SlidingDrawerActivity {
                 Intent i = new Intent(MainActivity.this, AddRestaurant.class);
                 i.putExtra("Name", Name.getText().toString());
                 startActivity(i);
+
             }
         });
         try {
@@ -178,6 +179,7 @@ public class MainActivity extends SlidingDrawerActivity {
                         .show();
             }
         });
+        Name.setText("");
     }
     /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {

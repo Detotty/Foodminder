@@ -33,10 +33,10 @@
             android:checked="false"
             android:icon="@drawable/about"
             android:title="@string/about" />
-        <item
+        <!--<item
             android:id="@+id/contact"
             android:checked="false"
             android:icon="@drawable/contact"
-            android:title="@string/contact" />
+            android:title="@string/contact" />-->
     </group>
 </menu>
